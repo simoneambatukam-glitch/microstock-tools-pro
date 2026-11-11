@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Microstock Tools Pro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          sans: ['Figtree', 'sans-serif'],
+          heading: ['Bricolage Grotesque', 'sans-serif'],
+        },
+        colors: {
+          brand: {
+            50: '#f1faf4',
+            100: '#dff1e6',
+            200: '#b9dcc7',
+            500: '#15803d',
+            600: '#16a34a',
+            700: '#0c5a2a',
+            800: '#0f2a1d',
+          }
+        }
+      }
+    }
+  }
+</script>
+<style>
+:root {
+  color-scheme: light;
+  --bg: #f1faf4;
+  --panel: rgba(255,255,255,.88);
+  --panel-2: #eef8f1;
+  --line: #b9dcc7;
+  --text: #0f2a1d;
+  --muted: #4a6957;
+  --accent: #15803d;
+  --accent-ink: #ffffff;
+  --ok: #15803d;
+  --warn: #b45309;
+  --bad: #b91c1c;
+}
+
+body {
+  background:
+    radial-gradient(900px 520px at 100% -8%, rgba(34,197,94,.26), transparent 62%),
+    radial-gradient(700px 520px at -12% 38%, rgba(21,128,61,.16), transparent 62%),
+    radial-gradient(820px 520px at 95% 112%, rgba(34,197,94,.22), transparent 62%),
+    linear-gradient(180deg, #ffffff 0%, #e9f7ee 100%) fixed;
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: "Figtree", system-ui, -apple-system, sans-serif;
+  min-height: 100vh;
+}
+
+header.top {
+  border-radius: 20px;
+  background:
+    conic-gradient(rgba(255,255,255,.08) 25%, transparent 0 50%, rgba(255,255,255,.08) 0 75%, transparent 0) 0 0 / 22px 22px,
+    linear-gradient(135deg, #0c5a2a, #15803d);
+  border: 1px solid #0c5a2a;
+  box-shadow: 0 10px 25px -5px rgba(21, 128, 61, 0.25);
+}
+
+.seg button {
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--text);
+  background: var(--panel-2);
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  min-height: 48px;
+  padding: 8px 10px;
+  cursor: pointer;
+  text-align: center;
+  line-height: 1.25;
+  transition: all 0.15s ease;
+}
+
+.seg button:hover {
+  border-color: var(--accent);
+}
+
+.seg button[aria-checked="true"] {
+  background: var(--accent);
+  color: var(--accent-ink);
+  border-color: var(--accent);
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(21, 128, 61, 0.2);
+}
+
+.seg button.alpha[aria-checked="false"] {
+  background: conic-gradient(#eef8f1 25%, #dcefe2 0 50%, #eef8f1 0 75%, #dcefe2 0) 0 0 / 12px 12px;
+}
+
+textarea, input[type="text"], input[type="password"] {
+  width: 100%;
+  font: inherit;
+  color: var(--text);
+  background: var(--panel-2);
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  padding: 12px;
+  transition: border-color 0.15s ease;
+}
+
+textarea:focus, input[type="text"]:focus, input[type="password"]:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(21, 128, 61, 0.15);
+}
+
+.btn {
+  font-weight: 600;
+  border-radius: 12px;
+  border: 1.5px solid var(--line);
+  background: var(--panel-2);
+  color: var(--text);
+  min-height: 46px;
+  padding: 8px 16px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.15s ease;
+}
+
+.btn:hover {
+  background: #e2f3e7;
+  border-color: var(--accent);
+}
+
+.btn.primary {
+  background: var(--accent);
+  color: var(--accent-ink);
+  border-color: var(--accent);
+  box-shadow: 0 4px 14px rgba(21, 128, 61, 0.3);
+}
+
+.btn.primary:hover {
+  background: #16a34a;
+  border-color: #16a34a;
+}
+
+.btn.small {
+  min-height: 36px;
+  font-size: 13px;
+  padding: 4px 12px;
+}
+
+.btn:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+}
+
+.chip {
+  font-size: 13px;
+  color: var(--text);
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 4px 12px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.chip:hover {
+  background: #fee2e2;
+  border-color: #f87171;
+  color: #991b1b;
+}
+
+.swatch {
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  flex-shrink: 0;
+}
+.swatch.transparent { background: conic-gradient(#dcefe2 25%, #f7fcf9 0 50%, #dcefe2 0 75%, #f7fcf9 0) 0 0 / 14px 14px; }
+.swatch.white { background: #ffffff; }
+.swatch.video {
+  background: linear-gradient(135deg, #0c5a2a, #15803d);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 20px;
+}
+.swatch.video::after { content: "\25B6"; }
+
+.dots::after { content: ""; animation: dots 1.2s steps(4) infinite; }
+@keyframes dots { 0% { content: ""; } 25% { content: "."; } 50% { content: ".."; } 75% { content: "..."; } }
+
+.deco { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+.deco .d { position: absolute; }
+.deco img { display: block; max-width: 100%; height: auto; mix-blend-mode: multiply; }
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 42, 29, 0.4);
+  backdrop-filter: blur(4px);
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+</style>
+</head>
+<body>
+
+<!-- SVG Icons Definition -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
+  <symbol id="h-cape" viewBox="0 0 100 100" fill="currentColor"><path d="M38 28 L16 94 L50 82 L84 94 L62 28 Z" opacity=".55"/><circle cx="50" cy="19" r="9"/><path d="M38 30 H62 L60 64 H40 Z"/><rect x="40" y="62" width="9" height="30" rx="3"/><rect x="51" y="62" width="9" height="30" rx="3"/><path d="M38 32 L24 54 L31 58 L42 40 Z"/><path d="M62 32 L76 54 L69 58 L58 40 Z"/><path d="M43 17 L49 18 L48 21 L42 20 Z M51 18 L57 17 L58 20 L52 21 Z" fill="#fff"/></symbol>
+  <symbol id="h-fly" viewBox="0 0 100 100" fill="currentColor"><path d="M36 66 L6 90 L18 96 L46 76 Z" opacity=".55"/><circle cx="72" cy="30" r="9"/><path d="M64 38 L28 64 L36 74 L74 46 Z"/><path d="M70 40 L94 26 L98 34 L76 50 Z"/><path d="M30 66 L10 78 L14 86 L38 74 Z"/></symbol>
+  <symbol id="h-fist" viewBox="0 0 100 100" fill="currentColor"><path d="M36 34 L14 92 L50 80 L86 92 L64 34 Z" opacity=".5"/><circle cx="50" cy="24" r="9"/><path d="M36 36 H64 L60 70 H40 Z"/><path d="M62 38 L74 12 L82 16 L70 46 Z"/><path d="M38 38 L26 62 L33 66 L43 46 Z"/><rect x="40" y="68" width="9" height="26" rx="3"/><rect x="51" y="68" width="9" height="26" rx="3"/></symbol>
+  <symbol id="h-robot" viewBox="0 0 100 100" fill="currentColor"><rect x="35" y="8" width="30" height="26" rx="7"/><rect x="39" y="17" width="22" height="7" rx="3" fill="#fff"/><rect x="28" y="38" width="44" height="32" rx="7"/><circle cx="50" cy="54" r="6" fill="#fff"/><rect x="14" y="40" width="11" height="28" rx="5"/><rect x="75" y="40" width="11" height="28" rx="5"/><rect x="34" y="72" width="13" height="24" rx="4"/><rect x="53" y="72" width="13" height="24" rx="4"/></symbol>
+  <symbol id="h-mask" viewBox="0 0 100 100" fill="currentColor"><path d="M8 38 Q50 10 92 38 Q88 66 66 66 Q50 56 34 66 Q12 66 8 38 Z"/><path d="M20 44 L42 48 L38 56 L22 52 Z M80 44 L58 48 L62 56 L78 52 Z" fill="#fff"/></symbol>
+</defs></svg>
+
+<div class="deco" id="deco" aria-hidden="true"></div>
+
+<div class="relative z-10 max-w-2xl mx-auto px-4 py-6 md:py-10">
+
+  <!-- Header -->
+  <header class="top p-6 text-white mb-6">
+    <div class="flex flex-wrap justify-between items-start gap-4">
+      <div>
+        <h1 class="font-heading font-bold text-3xl md:text-4xl leading-tight tracking-tight">Microstock Tools Pro</h1>
+        <p class="text-white/90 text-sm mt-2 max-w-md">
+          Pilih platform, jenis file & gaya. Dapatkan prompt AI gambar/video, judul akurat, 25-35 keyword, kategori resmi, serta saran format file real-time.
+        </p>
+      </div>
+      <div class="flex flex-wrap gap-2">
+        <button class="btn small bg-white/20 border-white/40 text-white hover:bg-white/30" id="btn-key">🔑 API Key</button>
+        <button class="btn small bg-white/20 border-white/40 text-white hover:bg-white/30" id="shuffle" type="button">🎲 Acak bg</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Card Form -->
+  <section class="bg-white/80 backdrop-blur border border-brand-200 rounded-2xl p-5 md:p-6 shadow-sm space-y-5" aria-label="Pengaturan">
+    
+    <!-- 1. Platform Upload -->
+    <div class="field" id="plat-field">
+      <label class="block font-semibold text-sm mb-2" id="l0">1. Platform Upload</label>
+      <div class="seg grid gap-2" role="radiogroup" aria-labelledby="l0" id="g-plat"></div>
+      <div class="mt-2 p-3 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs leading-relaxed" id="plat-hint" hidden></div>
+    </div>
+
+    <!-- 2. Jenis File -->
+    <div class="field" id="file-field">
+      <label class="block font-semibold text-sm mb-2" id="l1">2. Jenis File</label>
+      <div class="seg grid gap-2" role="radiogroup" aria-labelledby="l1" id="g-file"></div>
+    </div>
+
+    <!-- 3. Kategori Utama -->
+    <div class="field">
+      <label class="block font-semibold text-sm mb-2" id="l2">3. Kategori Utama</label>
+      <div class="seg grid gap-2" role="radiogroup" aria-labelledby="l2" id="g-cat"></div>
+    </div>
+
+    <!-- 4. Gaya -->
+    <div class="field">
+      <label class="block font-semibold text-sm mb-2" id="l3">4. Gaya / Tipe Format</label>
+      <div class="seg grid gap-2" role="radiogroup" aria-labelledby="l3" id="g-style"></div>
+      <div class="text-xs text-brand-800/70 mt-1.5" id="combo-hint" hidden></div>
+    </div>
+
+    <!-- Video Fields (Conditional) -->
+    <div class="field space-y-4 pt-2 border-t border-brand-200/60" id="vid-field" hidden>
+      <div>
+        <label class="block font-semibold text-sm mb-2" id="lv1">Rasio Video</label>
+        <div class="seg grid gap-2" role="radiogroup" aria-labelledby="lv1" id="g-ratio"></div>
+      </div>
+      <div>
+        <label class="block font-semibold text-sm mb-2" id="lv2">Gerak Kamera</label>
+        <div class="seg grid gap-2" role="radiogroup" aria-labelledby="lv2" id="g-motion"></div>
+      </div>
+      <div>
+        <label class="block font-semibold text-sm mb-2" id="lv3">Tipe Looping</label>
+        <div class="seg grid gap-2" role="radiogroup" aria-labelledby="lv3" id="g-loop"></div>
+      </div>
+    </div>
+
+    <!-- Visual Styles Modifier -->
+    <div class="field pt-2 border-t border-brand-200/60" id="vstyle-field" hidden>
+      <label class="block font-semibold text-sm mb-2" id="l3c">Gaya Visual Modifikasi</label>
+      <div class="seg grid gap-2" role="radiogroup" aria-labelledby="l3c" id="g-vstyle"></div>
+      <div class="text-xs text-brand-800/70 mt-2 p-2.5 rounded-lg bg-emerald-50/80 border border-brand-200" id="vstyle-hint" hidden></div>
+    </div>
+
+    <!-- Grid Selector for Icon/Sticker Set -->
+    <div class="field pt-2 border-t border-brand-200/60" id="grid-field" hidden>
+      <label class="block font-semibold text-sm mb-2" id="l3b">Susunan Isi Set (Kolom × Baris)</label>
+      <div class="seg grid gap-2" role="radiogroup" aria-labelledby="l3b" id="g-grid"></div>
+      <div class="text-xs text-amber-800 mt-2 p-2.5 rounded-lg bg-amber-50 border border-amber-200" id="grid-hint" hidden>
+        Set besar (6×6 & 8×8): generator AI sering salah hitung ikon. Jika jumlah ikon berlebih/kurang, jalankan ulang atau gunakan prompt satu-satu di bawah.
+      </div>
+    </div>
+
+    <!-- Theme Input -->
+    <div class="field">
+      <label class="block font-semibold text-sm mb-2" for="theme">5. Tema atau Deskripsi Aset</label>
+      <textarea id="theme" rows="3" placeholder="Contoh: Pasangan pengantin adat Jawa, siluet tegas, warna hangat, latar belakang bersih"></textarea>
+    </div>
+
+    <!-- Multimodal Image Upload -->
+    <div class="field pt-1" id="upload-field">
+      <label class="block font-semibold text-sm mb-2">Opsional: Upload Acuan Gambar / Referensi</label>
+      <div class="flex items-center gap-3">
+        <img id="thumb" alt="Preview" class="w-14 h-14 object-cover rounded-xl border border-brand-200 bg-emerald-50" hidden>
+        <div>
+          <label class="btn small cursor-pointer" for="imgfile" id="imgbtn">📁 Pilih Gambar</label>
+          <input type="file" id="imgfile" accept="image/png,image/jpeg,image/webp" class="hidden">
+          <button class="btn small text-red-700 hover:bg-red-50 border-red-200" id="imgclear" type="button" hidden>Hapus</button>
+        </div>
+      </div>
+      <p class="text-xs text-brand-800/70 mt-1.5">Gambar akan dianalisis oleh Gemini AI untuk membuat judul dan keyword yang persis menggambarkan visual objek tersebut.</p>
+    </div>
+
+    <!-- Generate Button -->
+    <button class="btn primary w-full text-lg py-3.5 mt-4" id="go" type="button">⚡ Generate Metadata & Prompt</button>
+    
+    <!-- Status Message -->
+    <div id="status" role="status" aria-live="polite" class="text-sm"></div>
+  </section>
+
+  <!-- Output Display -->
+  <div class="out mt-6 space-y-4" id="out" hidden>
+    
+    <!-- Controls -->
+    <div class="flex justify-between items-center bg-white/70 backdrop-blur p-3 rounded-xl border border-brand-200">
+      <span class="font-heading font-bold text-brand-800">Hasil Generate</span>
+      <div class="flex gap-2">
+        <button class="btn small primary" id="copyall" type="button">📋 Copy Semua</button>
+        <button class="btn small" id="reset" type="button">🔄 Reset</button>
+      </div>
+    </div>
+
+    <!-- Prompt Block -->
+    <div class="bg-white/80 backdrop-blur border border-brand-200 rounded-2xl p-4 md:p-5">
+      <div class="flex justify-between items-center mb-2">
+        <h2 class="font-heading font-bold text-base text-brand-800" id="h-prompt">Prompt Generator AI</h2>
+        <button class="btn small" data-copy="prompt" type="button">Copy Prompt</button>
+      </div>
+      <div class="bg-emerald-50/50 border border-brand-200/80 rounded-xl p-3 text-sm font-mono whitespace-pre-wrap break-words text-brand-800" id="o-prompt"></div>
+    </div>
+
+    <!-- Title Block -->
+    <div class="bg-white/80 backdrop-blur border border-brand-200 rounded-2xl p-4 md:p-5">
+      <div class="flex justify-between items-center mb-2">
+        <h2 class="font-heading font-bold text-base text-brand-800" id="h-title">Title / Description</h2>
+        <button class="btn small" data-copy="title" type="button">Copy Title</button>
+      </div>
+      <div class="text-base font-semibold text-brand-800" id="o-title"></div>
+      <div class="text-xs font-medium mt-2" id="o-title-meta"></div>
+    </div>
+
+    <!-- Keywords Block -->
+    <div class="bg-white/80 backdrop-blur border border-brand-200 rounded-2xl p-4 md:p-5">
+      <div class="flex justify-between items-center mb-2">
+        <h2 class="font-heading font-bold text-base text-brand-800">Keywords</h2>
+        <button class="btn small" data-copy="keywords" type="button">Copy Keywords</button>
+      </div>
+      <div class="flex flex-wrap gap-1.5 my-3" id="o-kw"></div>
+      <div class="text-xs font-medium" id="o-kw-meta"></div>
+      <div class="text-xs text-brand-800/60 mt-1">Klik pada kata kunci untuk menghapusnya.</div>
+    </div>
+
+    <!-- Single Item Prompts (For Grids) -->
+    <div class="bg-white/80 backdrop-blur border border-brand-200 rounded-2xl p-4 md:p-5" id="blk-single" hidden>
+      <div class="flex justify-between items-center mb-2">
+        <h2 class="font-heading font-bold text-base text-brand-800">Prompt Terpisah (Satu per Satu)</h2>
+        <button class="btn small" id="copy-singles" type="button">Copy Semua Prompt</button>
+      </div>
+      <p class="text-xs text-brand-800/70 mb-3">Jika AI generator tidak konsisten menghitung grid, gunakan prompt terpisah di bawah ini lalu gabungkan sendiri hasilnya di Canvas/Illustrator.</p>
+      <div id="o-single" class="space-y-2 text-sm"></div>
+    </div>
+
+    <!-- Category Block -->
+    <div class="bg-white/80 backdrop-blur border border-brand-200 rounded-2xl p-4 md:p-5">
+      <div class="flex justify-between items-center mb-2">
+        <h2 class="font-heading font-bold text-base text-brand-800" id="h-cat">Kategori Rekomendasi</h2>
+        <button class="btn small" data-copy="category" type="button">Copy Kategori</button>
+      </div>
+      <div class="text-base font-bold text-brand-700" id="o-cat"></div>
+      <div class="text-xs text-brand-800/70 mt-1" id="o-cat-alt"></div>
+      <div class="text-xs text-brand-800/80 mt-1.5 italic" id="o-cat-reason"></div>
+    </div>
+
+    <!-- Advice & Compliance Box -->
+    <div class="bg-white/80 backdrop-blur border border-brand-200 rounded-2xl p-4 md:p-5 space-y-4">
+      <h2 class="font-heading font-bold text-base text-brand-800">Saran Format & Legalitas</h2>
+      <div class="flex gap-3 items-start bg-emerald-50/60 p-3 rounded-xl border border-brand-200">
+        <div class="swatch" id="o-swatch"></div>
+        <div class="text-xs text-brand-800">
+          <strong class="block text-sm font-semibold mb-0.5" id="o-adv-title"></strong>
+          <div id="o-adv-reason" class="leading-relaxed"></div>
+        </div>
+      </div>
+      <div class="text-xs text-brand-800/80 border-l-4 border-brand-500 pl-3 py-1 bg-white/50 rounded-r-lg" id="reminder"></div>
+    </div>
+  </div>
+
+  <!-- Background & History Settings -->
+  <details class="mt-8 bg-white/80 backdrop-blur border border-brand-200 rounded-2xl p-4 text-sm" id="deco-ctl">
+    <summary class="font-heading font-bold text-brand-800 cursor-pointer">Kustomisasi Background & Riwayat</summary>
+    <div class="mt-3 space-y-4">
+      <div>
+        <p class="text-xs text-brand-800/70 mb-2">Upload avatar/gambar kustom (sebaiknya PNG transparan). Gambar disimpan lokal di browser dan disebar acak di latar belakang.</p>
+        <div class="flex flex-wrap items-center gap-2">
+          <label class="btn small cursor-pointer" for="bgfiles">➕ Tambah Gambar</label>
+          <input type="file" id="bgfiles" accept="image/*" multiple hidden>
+          <button class="btn small text-red-700 hover:bg-red-50 border-red-200" id="bgclear" type="button">Hapus Semua Bg</button>
+          <span class="text-xs text-brand-800/70" id="bgcount"></span>
+        </div>
+      </div>
+      <hr class="border-brand-200">
+      <div>
+        <p class="text-xs text-brand-800/70 mb-2">Riwayat 10 generate terakhir disimpan secara lokal.</p>
+        <div class="flex flex-wrap items-center gap-2">
+          <button class="btn small text-red-700 hover:bg-red-50 border-red-200" id="histclear" type="button">Clear Riwayat</button>
+          <span class="text-xs text-brand-800/70" id="histcount"></span>
+        </div>
+      </div>
+    </div>
+  </details>
+
+  <!-- History List -->
+  <div class="mt-6" id="hist" hidden>
+    <h3 class="font-heading font-bold text-base text-brand-800 mb-3">Riwayat Terakhir</h3>
+    <ul id="hist-list" class="space-y-2"></ul>
+  </div>
+
+</div>
+
+<!-- Modal Settings API Key -->
+<div class="modal-backdrop hidden" id="modal-key">
+  <div class="bg-white rounded-2xl p-6 max-w-md w-full border border-brand-200 shadow-xl space-y-4">
+    <h3 class="font-heading font-bold text-xl text-brand-800">Pengaturan Gemini API Key</h3>
+    <p class="text-xs text-brand-800/80 leading-relaxed">
+      Aplikasi ini menggunakan model <code class="bg-emerald-100 px-1 py-0.5 rounded text-brand-800 font-mono">gemini-3-flash-preview</code> langsung dari browser Anda. Jika kosong, sistem akan menggunakan runtime otomatis jika didukung.
+    </p>
+    <div>
+      <label class="block text-xs font-semibold mb-1" for="input-api-key">Gemini API Key</label>
+      <input type="password" id="input-api-key" placeholder="AIzaSy..." class="text-sm font-mono">
+    </div>
+    <div class="flex justify-end gap-2 pt-2">
+      <button class="btn small" id="btn-close-key" type="button">Batal</button>
+      <button class="btn small primary" id="btn-save-key" type="button">Simpan API Key</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast Notification -->
+<div class="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 bg-brand-800 text-brand-50 px-4 py-2 rounded-full text-xs font-semibold shadow-lg opacity-0 pointer-events-none transition-opacity duration-200" id="toast"></div>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ---------- Data & Constants ---------- */
+  var FILES = [
+    { id: "jpeg", label: "JPEG", alpha: false },
+    { id: "png", label: "PNG Transparan", alpha: true },
+    { id: "svg", label: "SVG", alpha: false }
+  ];
+  var CATS = [
+    { id: "foto", label: "Foto" },
+    { id: "ilustrasi", label: "Ilustrasi" },
+    { id: "vector", label: "Vector" },
+    { id: "video", label: "Video" }
+  ];
+  var DEFAULT_STYLE = { foto: "scene", ilustrasi: "isolated", vector: "flat", video: "loopbg" };
+  var RATIOS = [{ id: "16:9", label: "16:9 Horizontal" }, { id: "9:16", label: "9:16 Vertikal" }];
+  var MOTIONS = [
+    { id: "static", label: "Diam / Static" }, { id: "pan", label: "Pan" }, { id: "zoomin", label: "Zoom in" },
+    { id: "drone", label: "Drone" }, { id: "orbit", label: "Orbit" }
+  ];
+  var LOOPS = [{ id: "loop", label: "Looping Mulus" }, { id: "clip", label: "Klip Biasa" }];
+  var MOTION_RULE = {
+    static: "locked-off static camera, no camera movement",
+    pan: "slow smooth horizontal pan",
+    zoomin: "slow smooth push-in (zoom in)",
+    drone: "smooth aerial drone glide",
+    orbit: "slow smooth orbit around the subject"
+  };
+  var VIDRULE = {
+    loopbg: "seamless looping abstract motion background: flowing gradients, soft particles or waves, smooth continuous motion, no objects, no text",
+    aerial: "cinematic aerial drone shot of natural scenery (beach, rice terraces, mountains, misty forest), smooth gliding camera, natural light, realistic, high detail",
+    timelapse: "timelapse of a natural or urban scene (moving clouds, city at night with light trails, flower blooming, sunrise), fast smooth motion, stable framing",
+    macro: "slow motion macro close-up (water droplet, flower petals, coffee pour, splash), shallow depth of field, smooth fluid motion, crisp details",
+    food: "food and drink b-roll: rising steam, liquid being poured, ingredients falling or being prepared, appetizing lighting, shallow depth of field, close-up, no real brand packaging",
+    tech: "futuristic technology visuals: flowing data streams, network nodes, hologram interface, circuit patterns, glowing lines, dark background, no readable text, no real brand or logo",
+    anim2d: "2D flat motion graphic animation: moving icons, animated infographic elements or flat cartoon characters, clean flat vector look, smooth motion, no real text or numbers",
+    seasonal: "seasonal and festive theme (Christmas, Eid / Lebaran, Lunar New Year, New Year, sale promo), festive lighting and generic decorations, warm celebratory mood, no real brands, no text",
+    nusantara: "Indonesian Nusantara cultural scene: batik patterns, wayang shadow puppets, traditional dance, customary ceremony elements, respectful authentic details, no recognizable real person, no real brand",
+    unboxing: "unboxing and hands-on product video: hands opening a package, revealing the product, close-up details, clean bright background, smooth motion, no real brand packaging",
+    tutorial: "step-by-step tutorial video: clear hands demonstrating each step, top-down or close-up angle, bright even lighting, smooth cuts, no readable text",
+    stopmotion: "playful stop motion animation: handmade paper or clay objects moving in small increments, charming jerky motion, bright flat colors, no text",
+    hyperlapse: "hyperlapse of a city scene: fast-moving clouds and traffic light trails, day-to-night transition, stable smooth motion, cinematic",
+    productreveal: "cinematic product reveal: slow rotating product on clean background, dramatic rim light, shallow depth of field, smooth camera glide, blank unbranded product",
+    nature: "nature and wildlife b-roll: animals in natural habitat or sweeping landscapes, golden hour light, smooth slow camera, realistic, high detail",
+    fitness: "fitness and workout video: dynamic exercise movements, energetic pace, bright gym or outdoor setting, smooth tracking shots, no identifiable real faces",
+    workspace: "modern workspace video: hands typing, desk setup, coffee and notebook, soft natural window light, calm productive mood, smooth slow motion"
+  };
+  var STYLES = {
+    foto: [
+      { id: "scene", label: "Scene Penuh" },
+      { id: "isolatedfoto", label: "Subjek Isolasi (BG polos)" },
+      { id: "copyspace", label: "Copy Space" }
+    ],
+    vector: [
+      { id: "flat", label: "Flat Vector" },
+      { id: "sticker", label: "Sticker Pack" },
+      { id: "iconset", label: "Icon Set" }
+    ],
+    video: [
+      { id: "loopbg", label: "Looping Background Abstrak" },
+      { id: "aerial", label: "Sinematik Alam (Aerial/Drone)" },
+      { id: "timelapse", label: "Timelapse" },
+      { id: "macro", label: "Slow Motion Makro" },
+      { id: "food", label: "Food & Drink B-roll" },
+      { id: "tech", label: "Teknologi Futuristik" },
+      { id: "anim2d", label: "Animasi 2D Flat / Motion Graphic" },
+      { id: "seasonal", label: "Musiman (Natal, Lebaran, Imlek)" },
+      { id: "nusantara", label: "Budaya Nusantara" },
+      { id: "unboxing", label: "Unboxing & Hands-on" },
+      { id: "tutorial", label: "Tutorial Langkah-demi-Langkah" },
+      { id: "stopmotion", label: "Stop Motion" },
+      { id: "hyperlapse", label: "Hyperlapse Kota" },
+      { id: "productreveal", label: "Product Reveal Sinematik" },
+      { id: "nature", label: "Alam & Satwa" },
+      { id: "fitness", label: "Olahraga & Fitness" },
+      { id: "workspace", label: "Workspace & Produktivitas" }
+    ],
+    ilustrasi: [
+      { id: "full", label: "Ilustrasi Full Layar" },
+      { id: "isolated", label: "Isolated Background" }
+    ]
+  };
+  var LABEL = {
+    lineart: "Line art", wpap: "WPAP", flatdesign: "Flat design", siluet: "Siluet", karikatur: "Karikatur vektor", anime: "Anime / kartun vektor",
+    flatpattern: "Flat pattern", opart: "Op art geometris abstrak", minimaltrad: "Minimalis tradisional", isometrik: "Isometrik flat infografis", cutoutnaif: "Cut out gaya naif", siluetmin: "Ikon siluet minimalis", logoflat: "Ikon logo flat",
+    badgesale: "Badge & sale", bannertpl: "Banner template", frametpl: "Frame template", bggradient: "Background gradient",
+    glass3d: "3D glassmorphism", cyberui: "Cyber-UI dark neon", isodata: "Isometrik data & cloud", flat2: "Modern flat 2.0",
+    video: "Video", loopbg: "Looping background abstrak", aerial: "Sinematik alam", timelapse: "Timelapse", macro: "Slow motion makro", food: "Food & drink b-roll", tech: "Teknologi futuristik", anim2d: "Animasi 2D flat", seasonal: "Musiman", nusantara: "Budaya Nusantara",
+    jpeg: "JPEG", png: "PNG transparan", svg: "SVG",
+    ilustrasi: "Ilustrasi", vector: "Vector",
+    flat: "Flat vector", sticker: "Sticker pack", iconset: "Icon set", greeting: "Layout kartu ucapan", infographic: "Elemen infografis", full: "Ilustrasi full layar", isolated: "Isolated background",
+    foto: "Foto", scene: "Scene Penuh", isolatedfoto: "Subjek Isolasi (BG polos)", copyspace: "Copy Space",
+    cinematic: "Cinematic", whitestudio: "Studio Putih Minimalis", flatlay: "Flat Lay Top-Down", goldenhour: "Golden Hour", bluehour: "Blue Hour Twilight", lowkey: "Moody Low-Key", highkey: "High-Key Bright Airy", aerialfoto: "Aerial Drone View", longexp: "Long Exposure", bokeh: "Bokeh Shallow DOF", candid: "Lifestyle Candid", productclean: "Product Clean Mockup", foodedit: "Food Editorial",
+    doodle: "Hand-drawn Doodle", memphis: "Memphis Pattern", retrobadge: "Retro Vintage Badge", gradmesh: "Gradient Mesh Abstract", lowpoly: "Low Poly", monoline: "Monoline Icon", duotone: "Duotone", halftone: "Halftone Pop Art", mosaic: "Stained Glass Mosaic", batik: "Batik Motif Nusantara", mandala: "Mandala Ornament", artdeco: "Art Deco Geometric", bauhaus: "Bauhaus Shapes", swissmin: "Swiss Minimal", tribal: "Tribal Ornament Flat", botanical: "Floral Botanical Flat",
+    unboxing: "Unboxing & Hands-on", tutorial: "Tutorial Langkah-demi-Langkah", stopmotion: "Stop Motion", hyperlapse: "Hyperlapse Kota", productreveal: "Product Reveal Sinematik", nature: "Alam & Satwa", fitness: "Olahraga & Fitness", workspace: "Workspace & Produktivitas"
+  };
+
+  var GRIDS = [
+    { id: "2x2", label: "2×2", cols: 2, rows: 2 },
+    { id: "2x3", label: "2×3", cols: 2, rows: 3 },
+    { id: "3x3", label: "3×3", cols: 3, rows: 3 },
+    { id: "3x4", label: "3×4", cols: 3, rows: 4 },
+    { id: "4x4", label: "4×4", cols: 4, rows: 4 },
+    { id: "6x6", label: "6×6", cols: 6, rows: 6 },
+    { id: "8x8", label: "8×8", cols: 8, rows: 8 }
+  ];
+
+  var VSTYLES = [
+    { id: "lineart", label: "Line Art" },
+    { id: "wpap", label: "WPAP" },
+    { id: "flatdesign", label: "Flat Design" },
+    { id: "siluet", label: "Siluet" },
+    { id: "karikatur", label: "Karikatur Vektor" },
+    { id: "anime", label: "Anime / Kartun Vektor" },
+    { id: "flatpattern", label: "Flat Pattern" },
+    { id: "opart", label: "Op Art Geometris Abstrak" },
+    { id: "minimaltrad", label: "Minimalis Tradisional" },
+    { id: "isometrik", label: "Isometrik Flat Infografis" },
+    { id: "cutoutnaif", label: "Cut Out Gaya Naif" },
+    { id: "siluetmin", label: "Ikon Siluet Minimalis" },
+    { id: "logoflat", label: "Ikon Logo Flat" },
+    { id: "badgesale", label: "Badge & Sale" },
+    { id: "bannertpl", label: "Banner Template" },
+    { id: "frametpl", label: "Frame Template" },
+    { id: "bggradient", label: "Background Gradient" },
+    { id: "greeting", label: "Layout Kartu Ucapan" },
+    { id: "infographic", label: "Elemen Infografis" },
+    { id: "glass3d", label: "3D Glassmorphism" },
+    { id: "cyberui", label: "Cyber-UI Dark Neon" },
+    { id: "isodata", label: "Isometrik Data & Cloud" },
+    { id: "flat2", label: "Modern Flat 2.0 (Soft Gradient)" },
+    { id: "doodle", label: "Hand-drawn Doodle" },
+    { id: "memphis", label: "Memphis Pattern" },
+    { id: "retrobadge", label: "Retro Vintage Badge" },
+    { id: "gradmesh", label: "Gradient Mesh Abstract" },
+    { id: "lowpoly", label: "Low Poly" },
+    { id: "monoline", label: "Monoline Icon" },
+    { id: "duotone", label: "Duotone" },
+    { id: "halftone", label: "Halftone Pop Art" },
+    { id: "mosaic", label: "Stained Glass Mosaic" },
+    { id: "batik", label: "Batik Motif Nusantara" },
+    { id: "mandala", label: "Mandala Ornament" },
+    { id: "artdeco", label: "Art Deco Geometric" },
+    { id: "bauhaus", label: "Bauhaus Shapes" },
+    { id: "swissmin", label: "Swiss Minimal" },
+    { id: "tribal", label: "Tribal Ornament Flat" },
+    { id: "botanical", label: "Floral Botanical Flat" }
+  ];
+
+  var PSTYLES = [
+    { id: "cinematic", label: "Cinematic" },
+    { id: "whitestudio", label: "Studio Putih Minimalis" },
+    { id: "flatlay", label: "Flat Lay Top-Down" },
+    { id: "macro", label: "Macro Close-up" },
+    { id: "goldenhour", label: "Golden Hour" },
+    { id: "bluehour", label: "Blue Hour Twilight" },
+    { id: "lowkey", label: "Moody Low-Key" },
+    { id: "highkey", label: "High-Key Bright Airy" },
+    { id: "aerialfoto", label: "Aerial Drone View" },
+    { id: "longexp", label: "Long Exposure" },
+    { id: "bokeh", label: "Bokeh Shallow DOF" },
+    { id: "candid", label: "Lifestyle Candid" },
+    { id: "productclean", label: "Product Clean Mockup" },
+    { id: "foodedit", label: "Food Editorial" }
+  ];
+
+  var ILV = [{ id: "none", label: "Bebas (Tanpa Gaya Khusus)" }].concat(VSTYLES.filter(function (x) { return ["glass3d", "cyberui", "isodata", "flat2", "doodle", "memphis", "batik", "mandala", "botanical", "tribal", "retrobadge", "halftone"].indexOf(x.id) >= 0; }));
+  var BIZ3D = ["glass3d", "cyberui", "isodata"];
+  
+  var VRULE = {
+    lineart: "clean line art, uniform monoline outlines, no shading, no gradients, little or no solid fill",
+    wpap: "WPAP (Wedha's Pop Art Portrait) style: faceted subject built from flat angular geometric color blocks, bold contrasting colors, sharp polygon shapes. FICTIONAL generic person only",
+    flatdesign: "flat design, solid color shapes, simple geometric forms, no gradients, no shadows, minimal detail",
+    siluet: "silhouette style, solid single-color shapes with a strong readable outline, minimal inner detail, high contrast",
+    karikatur: "vector caricature style with exaggerated proportions, bold outlines, flat colors. FICTIONAL generic character only",
+    anime: "anime and cartoon vector style, clean cel-shaded flat colors, bold clean lines, expressive faces",
+    flatpattern: "seamless repeating flat pattern, tileable edges, simple repeated motifs with even spacing, flat solid colors, no gradients",
+    opart: "geometric abstract op art, high-contrast repeating lines, circles or squares creating an optical illusion, limited bold palette",
+    minimaltrad: "minimalist traditional style: traditional and cultural motifs simplified into clean flat forms, generous negative space",
+    isometrik: "isometric flat infographic style: 30 degree isometric view, flat colors, clean modular elements, blank placeholder bars",
+    cutoutnaif: "naive paper cut-out style: simple hand-cut looking shapes with slightly irregular edges, flat colors, childlike naive proportions",
+    siluetmin: "minimalist silhouette icon: single solid color glyph, simple instantly recognizable shape, balanced proportions",
+    logoflat: "flat logo-style icon mark: simple geometric symbol, solid colors, strong clean shape, no text or letters",
+    badgesale: "badge and sale label shapes: ribbons, seals, starbursts, price tags and stickers in flat solid colors, EMPTY areas left for text",
+    bannertpl: "horizontal banner template with a clear empty area for headline and copy, balanced decorative elements, no letters or numbers",
+    frametpl: "decorative frame and border template with a large empty center area for a photo or text, symmetrical border design",
+    bggradient: "smooth abstract background gradient, soft color transitions, no objects, no text, fills frame edge to edge",
+    greeting: "greeting card layout template: decorative border and illustrated elements arranged around a large empty central area",
+    glass3d: "3D glassmorphism: translucent frosted-glass panels with soft blur and subtle white borders, floating 3D objects, soft gradients",
+    cyberui: "dark mode cyber UI: near-black or deep navy background, neon cyan, magenta and electric blue glowing lines, HUD panels",
+    isodata: "isometric data flow and cloud ecosystem: 30 degree isometric view, modular blocks representing cloud, servers, database",
+    flat2: "modern flat 2.0 business illustration: clean flat shapes with soft subtle gradients, friendly simplified objects, soft shadows",
+    infographic: "set of infographic elements: bar and pie charts, progress bars, arrows, step markers without numbers, timeline nodes",
+    cinematic: "cinematic photograph, dramatic lighting, color graded teal and orange, shallow depth of field, widescreen feel",
+    whitestudio: "clean studio photograph on seamless white background, soft even lighting, sharp focus, commercial product look",
+    flatlay: "flat lay photograph shot straight from above, neatly arranged objects, soft natural light, tidy composition",
+    macro: "extreme macro close-up, crisp fine detail, very shallow depth of field, creamy bokeh",
+    goldenhour: "golden hour photograph, warm low sun, long soft shadows, glowing rim light",
+    bluehour: "blue hour twilight photograph, deep blue sky with warm artificial lights, calm atmosphere",
+    lowkey: "low-key moody photograph, deep shadows, single directional light, rich contrast",
+    highkey: "high-key bright airy photograph, soft diffused light, clean whites, gentle pastel tones",
+    aerialfoto: "aerial drone photograph from high angle, sweeping perspective, crisp detail, natural colors",
+    longexp: "long exposure photograph, silky smooth water or light trails, sharp static elements, tripod stability",
+    bokeh: "shallow depth of field, large aperture bokeh, subject sharp against softly blurred glowing background",
+    candid: "natural lifestyle candid photograph, authentic moment, soft window light, no direct eye contact (no identifiable real people)",
+    productclean: "clean product photograph on soft gradient backdrop, subtle reflection, blank unbranded label, commercial lighting",
+    foodedit: "editorial food photography, styled plating, natural side light, textured props, appetizing steam and fresh ingredients",
+    doodle: "hand-drawn doodle style: playful wobbly outlines, simple shapes, sparse flat color accents",
+    memphis: "Memphis design: bold squiggles, dots, triangles and zigzags in bright flat colors, playful 80s geometry",
+    retrobadge: "retro vintage badge emblem: circular or shield layout, limited 3-4 color palette, bold outlines, empty label area",
+    gradmesh: "abstract smooth gradient mesh shapes, soft blended color fields, modern fluid background, no text",
+    lowpoly: "low poly triangulated style: faceted triangle mesh, flat shaded facets in a harmonious palette",
+    monoline: "monoline icon style: single consistent stroke width, rounded caps and joins, no fill, simple geometry",
+    duotone: "duotone vector style: only two harmonized colors plus white, strong contrast, flat shapes",
+    halftone: "pop art halftone dots, bold black outlines, limited bright colors, comic-style flat shading",
+    mosaic: "stained glass mosaic: flat colored cells separated by thick dark lead lines, jewel tone palette",
+    batik: "Indonesian batik-inspired repeating motif: parang, kawung or floral ornaments, flat colors, symmetrical, seamless tile",
+    mandala: "radially symmetrical mandala ornament, intricate repeating geometric petals, single or duotone palette",
+    artdeco: "art deco geometry: symmetrical fans, sunbursts and stepped lines, gold and deep navy flat palette",
+    bauhaus: "Bauhaus style: primary-color circles, squares and triangles, strict grid composition, flat shapes",
+    swissmin: "Swiss minimal graphic: grid layout, large clean geometric forms, limited palette, generous white space",
+    tribal: "tribal ornament in flat solid color, bold symmetrical patterns, thick clean shapes (generic, culturally respectful)",
+    botanical: "flat botanical illustration: leaves, flowers and stems as simple layered solid shapes, harmonious natural palette"
+  };
+
+  var AS_CATS = ["Animals", "Buildings and Architecture", "Business", "Drinks", "The Environment", "States of Mind", "Food", "Graphic Resources", "Hobbies and Leisure", "Industry", "Landscapes", "Lifestyle", "People", "Plants and Flowers", "Culture and Religion", "Science", "Social Issues", "Sports", "Technology", "Transport", "Travel"];
+  var SS_CATS = ["Abstract", "Animals/Wildlife", "Arts", "Backgrounds/Textures", "Beauty/Fashion", "Buildings/Landmarks", "Business/Finance", "Celebrities", "Education", "Food and Drink", "Healthcare/Medical", "Holidays", "Industrial", "Interiors", "Miscellaneous", "Nature", "Objects", "Parks/Outdoor", "People", "Religion", "Science", "Signs/Symbols", "Sports/Recreation", "Technology", "Transportation", "Vintage"];
+  
+  var PLATS = [{ id: "adobe", label: "Adobe Stock" }, { id: "shutter", label: "Shutterstock" }];
+  var SS_WARN = "Catatan Kebijakan: Help Center Shutterstock menyatakan bahwa mereka menolak konten buatan AI Generatif dari kontributor. Gunakan opsi ini untuk karya asli buatan sendiri.";
+
+  var state = { platform: "adobe", file: "jpeg", cat: "ilustrasi", style: "isolated", grid: "3x3", vstyle: "flatdesign", ratio: "16:9", motion: "static", loop: false, imgBase64: null, imgMime: null, result: null };
+  var $ = function (id) { return document.getElementById(id); };
+
+  function isSS() { return state.platform === "shutter"; }
+  function platName() { return isSS() ? "a Shutterstock" : "an Adobe Stock"; }
+  function catList() { return isSS() ? SS_CATS : AS_CATS; }
+  function isSet(st) { return st === "iconset" || st === "sticker"; }
+
+  /* ---------- Segmented Control Renderer ---------- */
+  function renderSeg(el, items, current, onPick, cols) {
+    el.innerHTML = "";
+    var numCols = cols || (items.length <= 4 ? items.length : Math.ceil(items.length / 2));
+    el.style.gridTemplateColumns = "repeat(" + numCols + ", minmax(0, 1fr))";
+    items.forEach(function (it) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.setAttribute("role", "radio");
+      b.setAttribute("aria-checked", String(it.id === current));
+      if (it.alpha) b.className = "alpha";
+      b.textContent = it.label;
+      b.addEventListener("click", function () { onPick(it.id); });
+      el.appendChild(b);
+    });
+  }
+
+  function renderMenus() {
+    renderSeg($("g-plat"), PLATS, state.platform, function (v) { state.platform = v; renderMenus(); }, 2);
+    var ph = $("plat-hint"); ph.textContent = isSS() ? SS_WARN : ""; ph.hidden = !isSS();
+    
+    renderSeg($("g-file"), FILES, state.file, function (v) { state.file = v; renderMenus(); }, 3);
+    
+    if (!STYLES[state.cat].some(function (x) { return x.id === state.style; })) state.style = DEFAULT_STYLE[state.cat];
+    var isVid = state.cat === "video", isFoto = state.cat === "foto";
+    if (isFoto) state.file = "jpeg";
+    $("file-field").hidden = isVid || isFoto;
+    
+    renderSeg($("g-cat"), CATS, state.cat, function (v) {
+      state.cat = v;
+      state.style = DEFAULT_STYLE[v];
+      renderMenus();
+    }, 3);
+
+    renderSeg($("g-style"), STYLES[state.cat], state.style, function (v) { state.style = v; renderMenus(); }, isVid ? 2 : 3);
+    
+    $("vid-field").hidden = !isVid;
+    if (isVid) {
+      renderSeg($("g-ratio"), RATIOS, state.ratio, function (v) { state.ratio = v; renderMenus(); }, 2);
+      renderSeg($("g-motion"), MOTIONS, state.motion, function (v) { state.motion = v; renderMenus(); }, 3);
+      renderSeg($("g-loop"), LOOPS, state.loop ? "loop" : "clip", function (v) { state.loop = v === "loop"; renderMenus(); }, 2);
+    }
+
+    var showGrid = state.cat === "vector" && isSet(state.style);
+    $("grid-field").hidden = !showGrid;
+    if (showGrid) renderSeg($("g-grid"), GRIDS, state.grid, function (v) { state.grid = v; renderMenus(); }, 4);
+    $("grid-hint").hidden = !(showGrid && (state.grid === "6x6" || state.grid === "8x8"));
+
+    var isVec = state.cat === "vector", showV = state.cat !== "video";
+    var vlist = isVec ? VSTYLES : isFoto ? PSTYLES : ILV;
+    if (showV && !vlist.some(function (x) { return x.id === state.vstyle; })) state.vstyle = isVec ? "flatdesign" : isFoto ? "cinematic" : "none";
+    $("vstyle-field").hidden = !showV;
+    $("l3c").textContent = isVec ? "Gaya Visual Modifikasi" : isFoto ? "Gaya Visual Foto (JPEG)" : "Gaya Visual Modifikasi (Opsional)";
+    if (showV) renderSeg($("g-vstyle"), vlist, state.vstyle, function (v) { state.vstyle = v; renderMenus(); }, 3);
+
+    var vh = "", vs = state.vstyle, full = (vs === "flatpattern" || vs === "opart" || vs === "bggradient" || vs === "memphis" || vs === "batik" || vs === "mandala" || vs === "mosaic");
+    if (showV) {
+      if (BIZ3D.indexOf(vs) >= 0 && state.file === "svg") vh = "Efek 3D/glow kurang cocok untuk SVG murni. Disarankan memakai JPEG/PNG.";
+      else if (BIZ3D.indexOf(vs) >= 0 || vs === "flat2") vh = "Tema bisnis & data: teks/angka dibuat kosong secara otomatis untuk menghindari kecacatan font AI.";
+      else if (vs === "wpap" || vs === "karikatur") vh = "WPAP & Karikatur: Gunakan karakter fiktif/generik. Wajah tokoh nyata ditolak.";
+      else if (vs === "logoflat") vh = "Gunakan simbol generik, hindari kemiripan merek terdaftar.";
+    }
+    $("vstyle-hint").textContent = vh; $("vstyle-hint").hidden = !vh;
+    comboHint();
+  }
+
+  function comboHint() {
+    var h = $("combo-hint"), msg = "";
+    if (state.cat === "video") msg = "Video AI: Pastikan tidak memuat wajah orang nyata atau logo merek terdaftar.";
+    else if (isSS() && state.file === "svg") msg = "Shutterstock mewajibkan format EPS untuk vektor, konversi SVG Anda sebelum diupload.";
+    else if (state.file === "png" && state.style === "full") msg = "PNG transparan cocok untuk objek terisolasi. Untuk scene full layar disarankan JPEG.";
+    h.textContent = msg; h.hidden = !msg;
+  }
+
+  /* ---------- Helpers ---------- */
+  var toastT;
+  function toast(m) {
+    var t = $("toast"); t.textContent = m; t.style.opacity = "1";
+    clearTimeout(toastT); toastT = setTimeout(function () { t.style.opacity = "0"; }, 1600);
+  }
+
+  function copyText(txt) {
+    function fallback() {
+      var ta = document.createElement("textarea");
+      ta.value = txt; ta.style.position = "fixed"; ta.style.opacity = "0";
+      document.body.appendChild(ta); ta.select();
+      var ok = false; try { ok = document.execCommand("copy"); } catch (e) {}
+      document.body.removeChild(ta); toast(ok ? "Berhasil disalin!" : "Gagal menyalin");
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(txt).then(function () { toast("Berhasil disalin!"); }, fallback);
+    } else fallback();
+  }
+
+  function setStatus(msg, isErr, loading) {
+    var s = $("status");
+    s.className = isErr ? "mt-3 p-3 bg-red-50 border border-red-200 rounded-xl text-red-700 text-xs font-medium" : "mt-3 text-xs text-brand-800 font-medium";
+    s.innerHTML = "";
+    if (loading) {
+      var sp = document.createElement("span"); sp.className = "dots"; sp.textContent = msg; s.appendChild(sp);
+    } else {
+      s.textContent = msg || "";
+    }
+  }
+
+  /* ---------- Dynamic Gemini Instruction Prompt ---------- */
+  function buildInstruction(theme, hasImage, prior) {
+    var isVideo = state.cat === "video";
+    var f = state.file, c = state.cat, s = state.style;
+    var g = GRIDS.filter(function (x) { return x.id === state.grid; })[0] || GRIDS[2];
+    var n = g.cols * g.rows;
+
+    var styleRule = isVideo ? VIDRULE[s] : {
+      flat: "flat vector style, clean geometric shapes, solid colors, no gradients, minimal shading",
+      iconset: "icon set of exactly " + n + " icons arranged in " + g.cols + " columns by " + g.rows + " rows, one icon per cell, consistent line weight, plain white background",
+      sticker: "sticker pack of exactly " + n + " die-cut stickers arranged in " + g.cols + " columns by " + g.rows + " rows with clean thick white outline border",
+      full: "full-bleed illustration composition filling frame edge to edge, detailed background",
+      isolated: "single subject isolated on plain pure white background, centered",
+      scene: "full scene photograph: complete scene with subject in its natural environment, realistic lighting, natural colors, high detail",
+      isolatedfoto: "single subject isolated on plain light background, centered, clean commercial look, sharp focus",
+      copyspace: "photograph with large clean empty copy space, subject placed to one side, minimal uncluttered background, soft even lighting"
+    }[s];
+
+    var vRule = (!isVideo && state.vstyle && state.vstyle !== "none") ? (VRULE[state.vstyle] || "") : "";
+
+    return [
+      "You are an expert AI prompt engineer and microstock asset tagging specialist for " + platName() + " contributors.",
+      "Target Platform: " + (isSS() ? "Shutterstock" : "Adobe Stock"),
+      "Asset Category: " + LABEL[c],
+      "Asset Style: " + LABEL[s] + " (" + styleRule + ")",
+      vRule ? "Visual Style Modifier: " + LABEL[state.vstyle] + " (" + vRule + ")" : "",
+      isVideo ? "Video Aspect Ratio: " + (state.ratio === "9:16" ? "9:16 vertical" : "16:9 horizontal") + ", Camera Motion: " + MOTION_RULE[state.motion] + ", Loop: " + (state.loop ? "Seamless continuous loop" : "Standard clip") : "",
+      isSet(s) ? "Grid layout: " + g.cols + "x" + g.rows + " (" + n + " items total)." : "",
+      "User Theme/Description: " + (theme || "Derive main topic from attached image"),
+      hasImage ? "NOTE: An image reference is attached. Use actual visual elements from the image to generate title and keywords." : "",
+      prior && prior.length ? "Avoid duplicating previous generation titles: " + prior.map(function(p){ return p.title; }).join(" | ") : "",
+      "",
+      "CRITICAL INSTRUCTIONS & FORMAT:",
+      "Return ONLY a valid raw JSON object matching this schema without markdown codeblocks or extra text:",
+      "{",
+      '  "prompt": "Optimized text-to-image or text-to-video AI generation prompt in clear English. Include detailed subject description, lighting, composition, negative hints (no text, no watermark, no real people/brands).",',
+      '  "title": "Clear accurate english description, 130-170 characters (MAX 200). Concise phrase, no spam, no AI buzzwords, no brand names.",',
+      '  "keywords": ["25 to 35 relevant English keywords array, most relevant first"],',
+      '  "category": "Single exact match category chosen strictly from valid list: ' + catList().join(", ") + '",',
+      '  "category_alt": "Second best alternative category from the same list",',
+      '  "category_reason": "Short 1-sentence reason why main category fits",',
+      '  "file_advice": { "format": "' + (isVideo ? (state.loop ? "loop" : "single") : (state.file === "png" ? "transparent_png" : "white_background")) + '", "reason": "Short format advice sentence" }' +
+      (isSet(s) ? ',\n  "icon_names": ["Array of exactly ' + n + ' English names for each grid cell in order"],\n  "shared_style": "1 sentence describing the uniform visual style across all icons"' : ''),
+      "}"
+    ].filter(Boolean).join("\n");
+  }
+
+  /* ---------- Gemini API Call Execution ---------- */
+  async function generate() {
+    var theme = $("theme").value.trim();
+    if (!theme && !state.imgBase64) {
+      setStatus("Isi deskripsi tema terlebih dahulu atau upload gambar acuan.", true);
+      $("theme").focus(); return;
+    }
+
+    var apiKey = localStorage.getItem("gemini_api_key") || "";
+    var btn = $("go");
+    btn.disabled = true;
+    setStatus("Sedang meracik prompt & metadata dengan Gemini AI", false, true);
+
+    try {
+      var key = theme.toLowerCase();
+      var prior = key ? hist.filter(function (h) {
+        return h.theme && h.theme.trim().toLowerCase() === key && h.result && h.result.title;
+      }).slice(0, 3).map(function (h) { return { title: h.result.title }; }) : [];
+
+      var systemPrompt = buildInstruction(theme, !!state.imgBase64, prior);
+      var userContentParts = [{ text: "Generate microstock metadata and prompt for this theme." }];
+      
+      if (state.imgBase64) {
+        userContentParts.push({
+          inlineData: {
+            mimeType: state.imgMime || "image/jpeg",
+            data: state.imgBase64
+          }
+        });
+      }
+
+      var payload = {
+        contents: [{ role: "user", parts: userContentParts }],
+        systemInstruction: { parts: [{ text: systemPrompt }] },
+        generationConfig: {
+          responseMimeType: "application/json"
+        }
+      };
+
+      var apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+      var response = await fetch(apiUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+
+      if (!response.ok) {
+        var errRes = await response.json().catch(function(){return {};});
+        throw new Error((errRes.error && errRes.error.message) || ("API Error HTTP " + response.status));
+      }
+
+      var resData = await response.json();
+      var rawJsonText = resData.candidates?.[0]?.content?.parts?.[0]?.text;
+      if (!rawJsonText) throw new Error("Tidak menerima respon teks dari Gemini.");
+
+      var parsed = JSON.parse(rawJsonText);
+      var normalized = normalize(parsed);
+      state.result = normalized;
+      
+      renderResult();
+      pushHistory({
+        t: Date.now(), platform: state.platform, file: state.file, cat: state.cat, style: state.style,
+        grid: state.grid, vstyle: state.vstyle, ratio: state.ratio, motion: state.motion, loop: state.loop,
+        theme: theme, result: normalized
+      });
+
+      setStatus("");
+      $("out").hidden = false;
+      $("out").scrollIntoView({ behavior: "smooth", block: "start" });
+    } catch (err) {
+      console.error(err);
+      setStatus("Gagal Generate: " + err.message, true);
+    } finally {
+      btn.disabled = false;
+    }
+  }
+
+  function normalize(d) {
+    var kws = Array.isArray(d.keywords) ? d.keywords : String(d.keywords || "").split(",");
+    var seen = {}, list = [];
+    kws.forEach(function (k) {
+      k = String(k).trim().toLowerCase();
+      if (k && !seen[k]) { seen[k] = 1; list.push(k); }
+    });
+
+    var adv = d.file_advice || {};
+    var gg = GRIDS.filter(function (x) { return x.id === state.grid; })[0] || GRIDS[2];
+    var names = [];
+    if (isSet(state.style) && Array.isArray(d.icon_names)) {
+      names = d.icon_names.map(function (x) { return String(x).trim(); }).filter(Boolean).slice(0, gg.cols * gg.rows);
+    }
+
+    return {
+      platform: state.platform,
+      kind: state.style,
+      iconNames: names,
+      sharedStyle: String(d.shared_style || "").trim(),
+      category: String(d.category || "").trim(),
+      categoryAlt: String(d.category_alt || "").trim(),
+      categoryReason: String(d.category_reason || "").trim(),
+      prompt: String(d.prompt || "").trim(),
+      title: String(d.title || "").trim(),
+      keywords: list,
+      advice: {
+        format: state.cat === "video" ? (adv.format === "loop" ? "loop" : "single") : (adv.format === "white_background" ? "white_background" : "transparent_png"),
+        reason: String(adv.reason || "").trim()
+      }
+    };
+  }
+
+  /* ---------- Render Output UI ---------- */
+  function renderResult() {
+    var r = state.result; if (!r) return;
+    var ss = r.platform === "shutter";
+    
+    $("h-title").textContent = ss ? "Description (Shutterstock)" : "Title (Adobe Stock)";
+    $("h-cat").textContent = ss ? "Kategori Shutterstock" : "Kategori Adobe Stock";
+    
+    $("reminder").innerHTML = ss
+      ? "<strong>Penting:</strong> Shutterstock menolak konten AI. Pastikan file ini hasil karya manual Anda sendiri."
+      : "Saat upload ke Adobe Stock, wajib mencentang opsi <strong>Created using generative AI</strong>.";
+
+    $("o-prompt").textContent = r.prompt;
+    $("o-title").textContent = r.title;
+
+    var n = r.title.length, tm = $("o-title-meta");
+    tm.textContent = n + " Karakter " + (n > 200 ? "(Melebihi batas 200 karakter!)" : n >= 110 ? "(Sangat Baik, Ideal ±150)" : "(Agak Pendek)");
+    tm.className = "text-xs font-semibold mt-1 " + (n > 200 ? "text-red-600" : n >= 110 ? "text-emerald-700" : "text-amber-700");
+
+    var kw = $("o-kw"); kw.innerHTML = "";
+    r.keywords.forEach(function (k, i) {
+      var b = document.createElement("button");
+      b.type = "button"; b.className = "chip"; b.textContent = k;
+      b.title = "Klik untuk menghapus " + k;
+      b.addEventListener("click", function () {
+        r.keywords.splice(i, 1);
+        renderResult();
+        updateHistoryResult();
+      });
+      kw.appendChild(b);
+    });
+
+    var km = $("o-kw-meta"), c = r.keywords.length;
+    km.textContent = c + " Keywords (Rekomendasi 25 - 35)";
+    km.className = "text-xs font-semibold " + (c < 20 || c > 45 ? "text-red-600" : "text-emerald-700");
+
+    $("o-cat").textContent = r.category || "-";
+    $("o-cat-alt").textContent = r.categoryAlt ? "Alternatif: " + r.categoryAlt : "";
+    $("o-cat-reason").textContent = r.categoryReason;
+
+    var sb = $("blk-single"), so = $("o-single");
+    so.innerHTML = "";
+    var singles = singlePrompts(r);
+    sb.hidden = singles.length === 0;
+
+    singles.forEach(function (p, i) {
+      var row = document.createElement("div");
+      row.className = "flex justify-between items-center gap-2 p-2 bg-emerald-50/60 rounded-lg border border-brand-200/80";
+      
+      var tx = document.createElement("div");
+      tx.className = "text-xs text-brand-800 break-words flex-1";
+      tx.innerHTML = "<strong>" + (i + 1) + ". " + (r.iconNames[i] || "Item") + ":</strong> " + p;
+
+      var cb = document.createElement("button");
+      cb.type = "button"; cb.className = "btn small"; cb.textContent = "Copy";
+      cb.addEventListener("click", function () { copyText(p); });
+
+      row.appendChild(tx); row.appendChild(cb); so.appendChild(row);
+    });
+
+    var fm = r.advice.format, vid = fm === "loop" || fm === "single", png = fm === "transparent_png";
+    $("h-prompt").textContent = vid ? "Prompt Video AI" : "Prompt Gambar AI";
+    $("o-swatch").className = "swatch " + (vid ? "video" : png ? "transparent" : "white");
+    $("o-adv-title").textContent = vid ? (fm === "loop" ? "Format Loop Mulus" : "Format Klip Biasa") : (png ? "Format PNG Transparan" : "Format Background Putih");
+    $("o-adv-reason").textContent = r.advice.reason;
+  }
+
+  function singlePrompts(r) {
+    if (!r.iconNames || !r.iconNames.length) return [];
+    return r.iconNames.map(function (nm) {
+      var st = r.kind === "sticker";
+      return "A single " + (st ? "die-cut sticker of " + nm + " with thick white outline" : "icon of " + nm) + ", centered, " + (r.sharedStyle || "clean flat vector style") + ", plain white background, isolated.";
+    });
+  }
+
+  function allText() {
+    var r = state.result;
+    return "PROMPT:\n" + r.prompt + "\n\nTITLE:\n" + r.title + "\n\nKEYWORDS:\n" + r.keywords.join(", ") +
+      "\n\nCATEGORY:\n" + (r.category || "-") + (r.categoryAlt ? " (Alt: " + r.categoryAlt + ")" : "") +
+      "\n\nFORMAT ADVICE:\n" + r.advice.reason;
+  }
+
+  /* ---------- LocalStorage History ---------- */
+  var KEY = "microstock_history_v2", hist = [];
+  function loadHistory() {
+    try { hist = JSON.parse(localStorage.getItem(KEY) || "[]"); if (!Array.isArray(hist)) hist = []; } catch (e) { hist = []; }
+    renderHistory();
+  }
+  function saveHistory() { try { localStorage.setItem(KEY, JSON.stringify(hist.slice(0, 10))); } catch (e) {} }
+  function pushHistory(item) { hist.unshift(item); hist = hist.slice(0, 10); saveHistory(); renderHistory(); }
+  function updateHistoryResult() { if (hist.length && state.result) { hist[0].result = state.result; saveHistory(); } }
+
+  function renderHistory() {
+    var ul = $("hist-list"); ul.innerHTML = "";
+    $("hist").hidden = hist.length === 0;
+    var hc = $("histcount"); if (hc) hc.textContent = hist.length ? hist.length + " tersimpan" : "Kosong";
+
+    hist.forEach(function (h) {
+      var li = document.createElement("li");
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "w-full text-left bg-white/80 backdrop-blur border border-brand-200 rounded-xl p-3 hover:border-brand-500 transition-colors";
+      
+      var t = document.createElement("span");
+      t.className = "block font-bold text-sm text-brand-800 truncate";
+      t.textContent = (h.result && h.result.title) || h.theme || "(Tanpa Judul)";
+      
+      var s = document.createElement("span");
+      s.className = "block text-xs text-brand-800/60 mt-0.5";
+      s.textContent = [h.platform === "shutter" ? "Shutterstock" : "Adobe Stock", LABEL[h.cat], LABEL[h.style]].join(" • ");
+
+      b.appendChild(t); b.appendChild(s);
+      b.addEventListener("click", function () {
+        state.platform = h.platform || "adobe"; state.file = h.file; state.cat = h.cat; state.style = h.style; state.grid = h.grid || "3x3"; state.vstyle = h.vstyle || "flatdesign"; state.ratio = h.ratio || "16:9"; state.motion = h.motion || "static"; state.loop = !!h.loop; state.result = h.result;
+        $("theme").value = h.theme || "";
+        renderMenus(); renderResult(); $("out").hidden = false;
+        $("out").scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+      li.appendChild(b); ul.appendChild(li);
+    });
+  }
+
+  /* ---------- Image Base64 Handler ---------- */
+  function setupUpload() {
+    var inp = $("imgfile");
+    inp.addEventListener("change", function () {
+      var f = inp.files && inp.files[0]; if (!f) return;
+      if (f.size > 5 * 1024 * 1024) {
+        toast("Gambar terlalu besar (Maks 5MB)"); inp.value = ""; return;
+      }
+      state.imgMime = f.type;
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        var res = e.target.result;
+        state.imgBase64 = res.split(",")[1];
+        $("thumb").src = res;
+        $("thumb").hidden = false;
+        $("imgclear").hidden = false;
+        $("imgbtn").textContent = "Ganti Gambar";
+      };
+      reader.readAsDataURL(f);
+    });
+    $("imgclear").addEventListener("click", clearImg);
+  }
+
+  function clearImg() {
+    state.imgBase64 = null; state.imgMime = null;
+    $("imgfile").value = "";
+    $("thumb").hidden = true;
+    $("imgclear").hidden = true;
+    $("imgbtn").textContent = "📁 Pilih Gambar";
+  }
+
+  /* ---------- Custom Background Decorator Scatter ---------- */
+  var HEROES = ["h-cape", "h-fly", "h-fist", "h-robot", "h-mask"];
+  var SHADES = ["#16a34a", "#15803d", "#22c55e", "#0f5f2c"];
+  var customBlobs = [], customURLs = [];
+
+  function rnd(a, b) { return a + Math.random() * (b - a); }
+  function scatter() {
+    var deco = $("deco"); deco.innerHTML = "";
+    var items = [];
+    HEROES.concat(HEROES).forEach(function (id) { items.push({ sym: id }); });
+    customURLs.forEach(function (u) { items.push({ img: u }); });
+
+    var cols = window.innerWidth < 700 ? 2 : 4;
+    var rows = Math.ceil(items.length / cols);
+
+    items.forEach(function (it, k) {
+      var cx = k % cols, cy = Math.floor(k / cols);
+      var d = document.createElement("div"); d.className = "d";
+      d.style.left = ((cx + rnd(0.1, 0.7)) * 100 / cols) + "%";
+      d.style.top = ((cy + rnd(0.1, 0.7)) * 100 / rows) + "%";
+      d.style.transform = "rotate(" + Math.round(rnd(-30, 30)) + "deg)";
+
+      if (it.sym) {
+        var size = Math.round(rnd(60, 120));
+        var NS = "http://www.w3.org/2000/svg";
+        var svg = document.createElementNS(NS, "svg");
+        svg.setAttribute("viewBox", "0 0 100 100"); svg.setAttribute("width", size); svg.setAttribute("height", size);
+        svg.style.color = SHADES[Math.floor(Math.random() * SHADES.length)];
+        svg.style.opacity = rnd(0.15, 0.3).toFixed(2);
+        var u = document.createElementNS(NS, "use");
+        u.setAttribute("href", "#" + it.sym);
+        svg.appendChild(u); d.appendChild(svg);
+      } else {
+        var im = document.createElement("img"); im.src = it.img; im.alt = "";
+        im.style.width = Math.round(rnd(80, 150)) + "px"; im.style.opacity = rnd(0.25, 0.45).toFixed(2);
+        d.appendChild(im);
+      }
+      deco.appendChild(d);
+    });
+  }
+
+  /* ---------- Modal & Settings Event Listener ---------- */
+  function setupEvents() {
+    $("go").addEventListener("click", generate);
+    $("shuffle").addEventListener("click", scatter);
+
+    $("copyall").addEventListener("click", function () {
+      if (state.result) copyText(allText());
+    });
+
+    $("reset").addEventListener("click", function () {
+      state.result = null; $("theme").value = ""; clearImg();
+      $("out").hidden = true; window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    document.querySelectorAll("[data-copy]").forEach(function (b) {
+      b.addEventListener("click", function () {
+        var r = state.result; if (!r) return;
+        var k = b.getAttribute("data-copy");
+        copyText(k === "keywords" ? r.keywords.join(", ") : r[k]);
+      });
+    });
+
+    $("copy-singles").addEventListener("click", function () {
+      var r = state.result; if (!r) return;
+      copyText(singlePrompts(r).map(function (p, i) { return (i + 1) + ". " + p; }).join("\n\n"));
+    });
+
+    // Modal API Key
+    var modal = $("modal-key");
+    $("btn-key").addEventListener("click", function () {
+      $("input-api-key").value = localStorage.getItem("gemini_api_key") || "";
+      modal.classList.remove("hidden");
+    });
+    $("btn-close-key").addEventListener("click", function () { modal.classList.add("hidden"); });
+    $("btn-save-key").addEventListener("click", function () {
+      var val = $("input-api-key").value.trim();
+      localStorage.setItem("gemini_api_key", val);
+      modal.classList.add("hidden");
+      toast("API Key tersimpan!");
+    });
+
+    // Clear History
+    $("histclear").addEventListener("click", function () {
+      hist = []; localStorage.removeItem(KEY); renderHistory(); toast("Riwayat dihapus");
+    });
+  }
+
+  /* ---------- Initialization ---------- */
+  renderMenus();
+  loadHistory();
+  setupUpload();
+  setupEvents();
+  scatter();
+
+})();
+</script>
+</body>
+</html>
